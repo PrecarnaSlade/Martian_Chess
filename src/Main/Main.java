@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         Board boardMain = new Board(4);
-        boardMain.UpdatePossibleMoves();
+//        boardMain.UpdatePossibleMoves();
         boardMain.Display();
     }
 }

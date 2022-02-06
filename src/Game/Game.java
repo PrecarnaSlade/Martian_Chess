@@ -17,15 +17,18 @@ public class Game {
         this.playerTurn = 1;
     }
 
-    public void Start(Board pBoard) {
+    public void Play(Board pBoard) {
+        boolean bPosIsPossible;
         List<Piece> lUserPieces;
-        Scanner oScanner = new Scanner(System.in);
+        Piece oPiece;
         String sMove;
         String[] aMove;
+        Scanner oScanner = new Scanner(System.in);
         String[][] aMoveBis = new String[2][2];
         int[][] aMoveCoordinate = new int[2][2];
 
         while (!IsFinished(pBoard.Pieces)) {
+            pBoard.UpdatePossibleMoves(this.playerTurn);
             lUserPieces = GetPieceMoveByCurrentPlayer(pBoard.Pieces);
             System.out.print("Player " + this.playerTurn + " turn !\nEnter your play (xStart-yStart xDest-yDest) then press enter :");
             sMove = oScanner.nextLine();
@@ -41,8 +44,15 @@ public class Game {
                 }
             }
 
-            if (Board.GetOwnerByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]) == this.playerTurn ) {
-                
+            if (Board.GetOwnerByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]) == this.playerTurn) {
+                bPosIsPossible = false;
+                oPiece = pBoard.GetPieceByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]);
+                for (Pos iPos : oPiece.PossiblePos) {
+                    if (iPos.x == aMoveCoordinate[1][0] && iPos.y == aMoveCoordinate[1][1]) {
+                        bPosIsPossible = true;
+                        break;
+                    }
+                }
             }
 
         }

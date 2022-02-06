@@ -208,9 +208,9 @@ public class Board {
         }
     }
 
-    public void UpdatePossibleMoves() {
+    public void UpdatePossibleMoves(int pPlayerTurn) {
         for (Piece piece : this.Pieces) {
-            piece.GetMove(this);
+            piece.GetMove(this, pPlayerTurn);
         }
     }
 }

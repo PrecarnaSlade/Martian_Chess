@@ -60,7 +60,10 @@ public class Piece {
 
     }
 
-    public void GetMove(Board pBoard) {
+    public void GetMove(Board pBoard, int pPlayerTurn) {
+        if (this.owner != pPlayerTurn) {
+            return;
+        }
         Pos[] aAllPos;
         int nPieceX = this.position.x;
         int nPieceY = this.position.y;
