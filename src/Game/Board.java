@@ -27,7 +27,7 @@ public class Board {
 
 
             if (pLength == 8) {
-                this.board = AxialSymmetry(this.board, true, true);
+                this.board = AxialSymmetry(this.board);
             } else {
                 this.board[1][5] = 1;
                 this.board[2][5] = 1;
@@ -70,7 +70,7 @@ public class Board {
         }
     }
 
-    public int[][] AxialSymmetry(int[][] pArray, boolean pVertical, boolean pHorizontal) {
+    private int[][] AxialSymmetry(int[][] pArray) {
         int xDelta;
         int yDelta;
         int nCurrentCell;
@@ -81,13 +81,13 @@ public class Board {
                 nCurrentCell = pArray[i][j];
                 xDelta = this.length - 1 - i;
                 yDelta = this.length - 1 - j;
-                if (pVertical) {
+                if (true) {
                     pArray[i][yDelta] = nCurrentCell;
                 }
-                if (pHorizontal) {
+                if (true) {
                     pArray[xDelta][j] = nCurrentCell;
                 }
-                if (pVertical && pHorizontal) {
+                if (true && true) {
                     pArray[xDelta][yDelta] = nCurrentCell;
                 }
             }
@@ -211,6 +211,35 @@ public class Board {
     public void UpdatePossibleMoves(int pPlayerTurn) {
         for (Piece piece : this.Pieces) {
             piece.GetMove(this, pPlayerTurn);
+        }
+    }
+
+    public void DelPiece(int x, int y) {
+        int nPieceID = GetPieceByPos(x, y).id;
+        for (int i = 0; i < this.Pieces.size(); i++) {
+            if (this.Pieces.get(i).id == nPieceID) {
+                this.Pieces.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void DelPiece(Pos pPos) {
+        int nPieceID = GetPieceByPos(pPos).id;
+        for (int i = 0; i < this.Pieces.size(); i++) {
+            if (this.Pieces.get(i).id == nPieceID) {
+                this.Pieces.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void DelPiece(int pID) {
+        for (int i = 0; i < this.Pieces.size(); i++) {
+            if (this.Pieces.get(i).id == pID) {
+                this.Pieces.remove(i);
+                return;
+            }
         }
     }
 }

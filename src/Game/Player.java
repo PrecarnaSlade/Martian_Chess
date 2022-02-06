@@ -1,6 +1,16 @@
 package Game;
 
+import Pieces.Piece;
+import java.util.List;
+
 public class Player {
-    int score;
+    boolean isAI;
+    public int score;
+    List<Piece> Pieces;
+
+    public Player(boolean pIsAI, int pScore) {
+        this.isAI = pIsAI;
+        this.score = pScore;
+    }
 
 }

@@ -9,8 +9,8 @@ import java.util.List;
 
 public class Piece {
     int type;
-    int pts;
-    int id;
+    public int pts;
+    public int id;
     public int owner;
     public Pos position;
     public List<Pos> PossiblePos = new ArrayList<>();
@@ -57,6 +57,13 @@ public class Piece {
     public void Move(Pos pPos) {
         this.owner = Board.GetOwnerByPos(pPos);
         this.position = pPos;
+
+    }
+
+    public void Move(int x, int y) {
+        Pos oPos = new Pos(x,y);
+        this.owner = Board.GetOwnerByPos(oPos);
+        this.position = oPos;
 
     }
 
