@@ -10,16 +10,68 @@ public class Game {
     int playerNumber;
     int aiNumber;
     int playerTurn;
+    int round;
+    int maxRound;
+    Board oBoard;
+    Player[] players;
 
-    Game(int pNumberOfPlayer, int pNumberOfAI) {
+    Game(int pNumberOfPlayer, int pNumberOfAI, int pMaxRound) {
         this.playerNumber = pNumberOfPlayer;
         this.aiNumber = pNumberOfAI;
-        this.playerTurn = 1;
+        this.maxRound = pMaxRound;
+        this.round = 1;
     }
 
-    public static void OneTurn(Board pBoard, Player[] pPlayer, int pTurn) {
+    public void Start(int pLength) {
+        this.oBoard = new Board(pLength);
+        this.playerTurn = 1;
+        this.players = new Player[pLength % 2];
+
+        int nPlayerAdded = 0;
+        boolean bIsAI;
+
+        for (int i = 1; i <= pLength % 2; i++) {
+            if (nPlayerAdded != this.playerNumber) {
+                bIsAI = false;
+            } else {
+                bIsAI = true;
+            }
+            this.players[i - 1] = new Player(bIsAI, 0, i);
+        }
+    }
+
+    public void End(Player[] pPlayers) {
+        for (Player iPlayer : pPlayers) {
+            iPlayer.globalScore += iPlayer.getScore();
+        }
+        this.playerTurn = -1;
+        this.oBoard = null;
+        this.round += 1;
+        if (this.round > this.maxRound) {
+            DisplayScore(true, pPlayers);
+            System.exit(0);
+        } else {
+            DisplayScore(false, pPlayers);
+        }
+    }
+
+    public void DisplayScore(boolean pGlobal, Player[] pPlayers) {
+        String str = "";
+        for (Player iPlayer : pPlayers) {
+            str += "Player " + iPlayer.number + " score : ";
+            if (pGlobal) {
+                str += iPlayer.getGlobalScore() + "\n";
+            } else {
+                str += iPlayer.getScore() + "\n";
+            }
+        }
+        System.out.println(str);
+    }
+
+    public static void OneTurn(Board pBoard, Player[] pPlayer, int pTurn) { // turn needs to be turned into Base 0 (it is in base 1)
         boolean bPosIsPossible;
         Piece oPiece;
+        Piece oTargetPiece;
         Player oCurrentPlayer;
         String sMove;
         String[] aMove;
@@ -29,13 +81,12 @@ public class Game {
         String[][] aMoveBis = new String[2][2];
         int[][] aMoveCoordinate = new int[2][2];
 
-        pBoard.UpdatePossibleMoves(pTurn + 1);
         oCurrentPlayer = pPlayer[pTurn];
-
+        pBoard.UpdatePossibleMoves(oCurrentPlayer.number);
 
         while (!bGoodStart || !bGoodEnd) {
             bGoodStart = false;
-            System.out.print("Player " + (pTurn + 1) + " turn !\nEnter your play (xStart-yStart xDest-yDest) then press enter : ");
+            System.out.print("Player " + (oCurrentPlayer.number) + " turn !\nEnter your play (xStart-yStart xDest-yDest) then press enter : ");
             sMove = oScanner.nextLine();
             aMove = sMove.split(" ");
             if (aMove.length != 2) {
@@ -53,7 +104,7 @@ public class Game {
                 }
             }
 
-            if (Board.GetOwnerByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]) == (pTurn + 1)) {
+            if (Board.GetOwnerByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]) == (oCurrentPlayer.number)) {
                 bPosIsPossible = false;
                 oPiece = pBoard.GetPieceByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]);
                 if (oPiece == null) {
@@ -68,7 +119,12 @@ public class Game {
                 }
                 if (bPosIsPossible) {
                     if (pBoard.board[aMoveCoordinate[1][0]][aMoveCoordinate[1][1]] != 0) {
-                        oCurrentPlayer.score += pBoard.GetPieceByPos(aMoveCoordinate[1][0], aMoveCoordinate[1][1]).pts;
+                        oTargetPiece = pBoard.GetPieceByPos(aMoveCoordinate[1][0], aMoveCoordinate[1][1]);
+                         if (oTargetPiece.owner != oCurrentPlayer.number) {
+                             oCurrentPlayer.score += oTargetPiece.pts;
+                         } else {
+                             oPiece.Merge(oTargetPiece);
+                         }
                         pBoard.DelPiece(aMoveCoordinate[1][0], aMoveCoordinate[1][1]);
                     }
                     oPiece.Move(aMoveCoordinate[1][0], aMoveCoordinate[1][1]);

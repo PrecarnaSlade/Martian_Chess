@@ -238,5 +238,11 @@ public class Piece {
         }
     }
 
+    public void Merge(Piece pPiece) {
+        int nNewPieceType = this.type + pPiece.type;
+        if (nNewPieceType <= 3) {
+            this.type = nNewPieceType;
+        }
+    }
 }
 
