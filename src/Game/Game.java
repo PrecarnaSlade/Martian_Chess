@@ -15,7 +15,7 @@ public class Game {
     Board oBoard;
     Player[] players;
 
-    Game(int pNumberOfPlayer, int pNumberOfAI, int pMaxRound) {
+    public Game(int pNumberOfPlayer, int pNumberOfAI, int pMaxRound) {
         this.playerNumber = pNumberOfPlayer;
         this.aiNumber = pNumberOfAI;
         this.maxRound = pMaxRound;
@@ -25,12 +25,12 @@ public class Game {
     public void Start(int pLength) {
         this.oBoard = new Board(pLength);
         this.playerTurn = 1;
-        this.players = new Player[pLength % 2];
+        this.players = new Player[pLength / 2];
 
         int nPlayerAdded = 0;
         boolean bIsAI;
 
-        for (int i = 1; i <= pLength % 2; i++) {
+        for (int i = 1; i <= pLength / 2; i++) {
             if (nPlayerAdded != this.playerNumber) {
                 bIsAI = false;
             } else {
@@ -55,7 +55,22 @@ public class Game {
         }
     }
 
-    public void DisplayScore(boolean pGlobal, Player[] pPlayers) {
+    public void Play(int pLength) {
+        Start(pLength);
+        while (true) {
+            while (!IsFinished(this.oBoard.Pieces)) {
+                this.oBoard.Display();
+                OneTurn(this.oBoard, this.players, this.playerTurn);
+                NextTurn();
+                if (this.playerTurn == 3) {
+                    return;
+                }
+            }
+            End(this.players);
+        }
+    }
+
+    private void DisplayScore(boolean pGlobal, Player[] pPlayers) {
         String str = "";
         for (Player iPlayer : pPlayers) {
             str += "Player " + iPlayer.number + " score : ";
@@ -81,8 +96,8 @@ public class Game {
         String[][] aMoveBis = new String[2][2];
         int[][] aMoveCoordinate = new int[2][2];
 
-        oCurrentPlayer = pPlayer[pTurn];
-        pBoard.UpdatePossibleMoves(oCurrentPlayer.number);
+        oCurrentPlayer = pPlayer[pTurn - 1];
+        pBoard.UpdatePossibleMoves(pTurn);
 
         while (!bGoodStart || !bGoodEnd) {
             bGoodStart = false;

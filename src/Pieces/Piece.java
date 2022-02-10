@@ -61,10 +61,9 @@ public class Piece {
     }
 
     public void Move(int x, int y) {
-        Pos oPos = new Pos(x,y);
-        this.owner = Board.GetOwnerByPos(oPos);
-        this.position = oPos;
-
+        this.position.x = x;
+        this.position.y = y;
+        this.owner = Board.GetOwnerByPos(this.position);
     }
 
     public void GetMove(Board pBoard, int pPlayerTurn) {
@@ -85,7 +84,7 @@ public class Piece {
             aAllPos = new Pos[4];
 
             for (int i = 0; i < 4; i++) {
-                oGhostPos = new Pos(nPieceX + aFirstNum[i % 2], nPieceY + aSecondNum[i]);
+                oGhostPos = new Pos(nPieceX + aFirstNum[i % 2], nPieceY + aSecondNum[i], pBoard.length);
                 aAllPos[i] = oGhostPos;
             }
         } else if (IsDrone()) {
@@ -98,7 +97,7 @@ public class Piece {
             int nDown = 1;
             aAllPos = new Pos[0];
 
-            for (int iDelta = 1; iDelta <= 2; iDelta++) {
+            for (int iDelta = 1; iDelta < 3; iDelta++) {
                 nSumPossibleMoves = nRight + nLeft + nUp + nDown;
                 nPossibleMovesAdded = 0;
 
@@ -106,7 +105,7 @@ public class Piece {
                 nStartingPos = aAllPos.length - nSumPossibleMoves;
 
                 if (nRight != 0) {
-                    oGhostPos = new Pos(nPieceX + iDelta, nPieceY);
+                    oGhostPos = new Pos(nPieceX + iDelta, nPieceY, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -114,7 +113,7 @@ public class Piece {
                     }
                 }
                 if (nLeft != 0) {
-                    oGhostPos = new Pos(nPieceX - iDelta, nPieceY);
+                    oGhostPos = new Pos(nPieceX - iDelta, nPieceY, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -122,7 +121,7 @@ public class Piece {
                     }
                 }
                 if (nUp != 0) {
-                    oGhostPos = new Pos(nPieceX, nPieceY - iDelta);
+                    oGhostPos = new Pos(nPieceX, nPieceY - iDelta, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -130,7 +129,7 @@ public class Piece {
                     }
                 }
                 if (nDown != 0) {
-                    oGhostPos = new Pos(nPieceX, nPieceY + iDelta);
+                    oGhostPos = new Pos(nPieceX, nPieceY + iDelta, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     if (!pBoard.IsEmpty(oGhostPos)) {
                         nDown = 0;
@@ -160,7 +159,7 @@ public class Piece {
 
 
                 if (nN != 0) {
-                    oGhostPos = new Pos(nPieceX, nPieceY - iDelta);
+                    oGhostPos = new Pos(nPieceX, nPieceY - iDelta, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -168,7 +167,7 @@ public class Piece {
                     }
                 }
                 if (nNE != 0) {
-                    oGhostPos = new Pos(nPieceX + iDelta, nPieceY - iDelta);
+                    oGhostPos = new Pos(nPieceX + iDelta, nPieceY - iDelta, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -176,7 +175,7 @@ public class Piece {
                     }
                 }
                 if (nE != 0) {
-                    oGhostPos = new Pos(nPieceX + iDelta, nPieceY);
+                    oGhostPos = new Pos(nPieceX + iDelta, nPieceY, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -184,7 +183,7 @@ public class Piece {
                     }
                 }
                 if (nSE != 0) {
-                    oGhostPos = new Pos(nPieceX + iDelta, nPieceY + iDelta);
+                    oGhostPos = new Pos(nPieceX + iDelta, nPieceY + iDelta, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -192,7 +191,7 @@ public class Piece {
                     }
                 }
                 if (nS != 0) {
-                    oGhostPos = new Pos(nPieceX, nPieceY + iDelta);
+                    oGhostPos = new Pos(nPieceX, nPieceY + iDelta, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -200,7 +199,7 @@ public class Piece {
                     }
                 }
                 if (nSW != 0) {
-                    oGhostPos = new Pos(nPieceX - iDelta, nPieceY + iDelta);
+                    oGhostPos = new Pos(nPieceX - iDelta, nPieceY + iDelta, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -208,7 +207,7 @@ public class Piece {
                     }
                 }
                 if (nW != 0) {
-                    oGhostPos = new Pos(nPieceX - iDelta, nPieceY);
+                    oGhostPos = new Pos(nPieceX - iDelta, nPieceY, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     nPossibleMovesAdded += 1;
                     if (!pBoard.IsEmpty(oGhostPos)) {
@@ -216,7 +215,7 @@ public class Piece {
                     }
                 }
                 if (nNW != 0) {
-                    oGhostPos = new Pos(nPieceX - iDelta, nPieceY - iDelta);
+                    oGhostPos = new Pos(nPieceX - iDelta, nPieceY - iDelta, pBoard.length);
                     aAllPos[nStartingPos + nPossibleMovesAdded] = oGhostPos;
                     if (!pBoard.IsEmpty(oGhostPos)) {
                         nNW = 0;

@@ -49,7 +49,7 @@ public class Board {
                 for (int j = 0; j < 8; j++) {
                     nCurrentCell = this.board[i][j];
                     if (nCurrentCell != 0) {
-                        oPos = new Pos(i, j);
+                        oPos = new Pos(i, j, pLength);
                         if (j < 4 && i < 4) {
                             nOwner = 1;
                         } else if (j > 4 && i < 4) {
