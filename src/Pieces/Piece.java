@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Piece {
-    int type;
+    public int type;
     public int pts;
     public int id;
     public int owner;
@@ -226,6 +226,8 @@ public class Piece {
         } else {
             aAllPos = new Pos[0];
         }
+
+        this.PossiblePos = new ArrayList<>();
 
         for (Pos iPos : aAllPos) {
             if (iPos.IsCorrect(nLength)) {

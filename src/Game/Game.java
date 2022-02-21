@@ -12,6 +12,7 @@ public class Game {
     int playerTurn;
     int round;
     int maxRound;
+    int[][] LastMove;
     Board oBoard;
     Player[] players;
 
@@ -62,7 +63,7 @@ public class Game {
                 this.oBoard.Display();
                 OneTurn(this.oBoard, this.players, this.playerTurn);
                 NextTurn();
-                if (this.playerTurn == 3) {
+                if (this.playerTurn == 4) {
                     return;
                 }
             }
@@ -83,7 +84,7 @@ public class Game {
         System.out.println(str);
     }
 
-    public static void OneTurn(Board pBoard, Player[] pPlayer, int pTurn) { // turn needs to be turned into Base 0 (it is in base 1)
+    public static int[][] OneTurn(Board pBoard, Player[] pPlayer, int pTurn) { // turn needs to be turned into Base 0 (it is in base 1)
         boolean bPosIsPossible;
         Piece oPiece;
         Piece oTargetPiece;
@@ -119,12 +120,13 @@ public class Game {
                 }
             }
 
-            if (Board.GetOwnerByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]) == (oCurrentPlayer.number)) {
+            if (Board.GetOwnerByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]) == oCurrentPlayer.number) {
                 bPosIsPossible = false;
                 oPiece = pBoard.GetPieceByPos(aMoveCoordinate[0][0], aMoveCoordinate[0][1]);
                 if (oPiece == null) {
                     continue;
                 }
+                oPiece.GetMove(pBoard, pTurn);
                 bGoodStart = true;
                 for (Pos iPos : oPiece.PossiblePos) {
                     if (iPos.x == aMoveCoordinate[1][0] && iPos.y == aMoveCoordinate[1][1]) {
@@ -149,6 +151,7 @@ public class Game {
                 }
             }
         }
+        return aMoveCoordinate;
     }
 
     private boolean IsFinished(List<Piece> pPieces) {
@@ -156,7 +159,7 @@ public class Game {
     }
 
     private void NextTurn() {
-        this.playerTurn += 1;
+        this.playerTurn = (this.playerTurn) % (this.playerNumber + this.aiNumber) + 1;
     }
 
     private List<Piece> GetPieceMoveByCurrentPlayer(List<Piece> pPieceArray) {

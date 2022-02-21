@@ -98,6 +98,7 @@ public class Board {
 
     public void Display() {
         String sBoard = "";
+        Piece oPiece;
 
         for (int i = 0; i < this.length; i++) {
             sBoard += " ———";
@@ -109,7 +110,12 @@ public class Board {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < this.length; j++) {
-                sBoard += "| " + this.board[j][i] + " ";
+                oPiece = GetPieceByPos(j, i);
+                if (oPiece != null) {
+                    sBoard += "| " + oPiece.type + " ";
+                } else {
+                    sBoard += "| 0 ";
+                }
                 if (j == 3 && this.length > 4) {
                     sBoard += "|";
                 }
@@ -187,7 +193,7 @@ public class Board {
         int y = pPos.y;
         if (y < 4 && x < 4) {
             return  1;
-        } else if (y > 4 && x < 4) {
+        } else if (y > 3 && x < 4) {
             return 2;
         } else if (y < 4 && x > 4) {
             return 3;
@@ -199,7 +205,7 @@ public class Board {
     public static int GetOwnerByPos(int x, int y) {
         if (y < 4 && x < 4) {
             return  1;
-        } else if (y > 4 && x < 4) {
+        } else if (y > 3 && x < 4) {
             return 2;
         } else if (y < 4 && x > 4) {
             return 3;

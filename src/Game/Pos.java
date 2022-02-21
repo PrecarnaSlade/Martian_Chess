@@ -17,6 +17,6 @@ public class Pos {
     }
 
     public boolean IsCorrect(int pLength) {
-        return this.x >= 0 && this.x < pLength && this.y >= 0 && this.y < pLength;
+        return this.x >= 0 && this.x < pLength && this.y >= 0 && this.y < 8;
     }
 }
